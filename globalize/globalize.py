@@ -9,10 +9,11 @@ from .transform import transform_roi_to_quad
 def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
     simg = Image.open(inputFilename)
     (w, h) = simg.size
-    dimg = Image.new('RGB', simg.size, 'white')
 
     # Back the image with numpy arrays
     simg_np = np.asarray(simg)
+    dimg_np = np.full_like(simg_np, (255, 255, 255))
+    dimg = Image.frombuffer('RGB', simg.size, dimg_np)
 
     r = tropicsToEquatorRatio
 
@@ -52,7 +53,7 @@ def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
 
             draw.line([p1, p2, p3, p4, p1], fill = 'black', width = 10)
 
-            transform_roi_to_quad(simg_np, dimg,
+            transform_roi_to_quad(simg_np, dimg_np,
                 src = ((x0, y0), (x1, y1)),
                 dst = (p1, p2, p3, p4)
             )
