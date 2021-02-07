@@ -48,11 +48,10 @@ def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
 
             draw.line([p1, p2, p3, p4, p1], fill = 'black', width = 10)
 
-            if xsection == 0 and ysection == 0:
-                transform_roi_to_quad(simg, dimg,
-                    src = ((x0, y0), (x1, y1)),
-                    dst = (p1, p2, p3, p4)
-                )
+            transform_roi_to_quad(simg, dimg,
+                src = ((x0, y0), (x1, y1)),
+                dst = (p1, p2, p3, p4)
+            )
     dimg.save(outputFilename)
 
 if __name__ == "__main__":

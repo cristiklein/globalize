@@ -3,7 +3,7 @@
 import os
 import sys
 
-from globalize import globalize
+from globalize.globalize import globalize
 
 if len(sys.argv) < 2:
     print(f"Usage: {sys.argv[0]} input.jpg")
