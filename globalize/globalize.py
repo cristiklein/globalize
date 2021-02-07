@@ -23,13 +23,13 @@ def globalize(
     rp = polesToEquatorRatio
 
     for xsection in range(8):
-        for ysection in range(4):
+        for ysection in range(5):
             x0 = (w // 8) * (xsection)
             x1 = (w // 8) * (xsection + 1) - 1
-            y0 = (h // 4) * (ysection)
-            y1 = (h // 4) * (ysection + 1) - 1
+            y0 = (h // 5) * (ysection)
+            y1 = (h // 5) * (ysection + 1) - 1
 
-            if ysection in [ 0, 3 ]:
+            if ysection in [ 0, 4 ]:
                 # North/South Pole
                 xlt = int(x0*(rp) + x1*(1-rp))
                 xrt = int(x1*(rp) + x0*(1-rp))
@@ -37,7 +37,7 @@ def globalize(
                 xlb = int(x0*(rt) + x1*(1-rt))
                 xrb = int(x1*(rt) + x0*(1-rt))
 
-            else:
+            elif ysection in [ 1, 3 ]:
                 # North/South of equator
                 xlt = int(x0*rt + x1*(1-rt))
                 xrt = int(x1*rt + x0*(1-rt))
@@ -45,7 +45,11 @@ def globalize(
                 xlb = x0
                 xrb = x1
 
-            if ysection >= 2:
+            else:
+                # Equator
+                xlt, xrt, xrb, xlb = x0, x1, x1, x0
+
+            if ysection >= 3:
                 # South
                 xlt, xlb = xlb, xlt
                 xrt, xrb = xrb, xrt
