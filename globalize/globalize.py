@@ -18,12 +18,10 @@ def globalize(
     # Back the image with numpy arrays
     simg_np = np.asarray(simg)
     dimg_np = np.full_like(simg_np, (255, 255, 255))
-    dimg = Image.frombuffer('RGB', simg.size, dimg_np)
 
     rt = tropicsToEquatorRatio
     rp = polesToEquatorRatio
 
-    draw = ImageDraw.Draw(dimg)
     for xsection in range(8):
         for ysection in range(4):
             x0 = (w // 8) * (xsection)
@@ -57,12 +55,11 @@ def globalize(
             p3 = (xrb, y1)
             p4 = (xlb, y1)
 
-            draw.line([p1, p2, p3, p4, p1], fill = 'black', width = 10)
-
             transform_roi_to_quad(simg_np, dimg_np,
                 src = ((x0, y0), (x1, y1)),
                 dst = (p1, p2, p3, p4)
             )
+    dimg = Image.fromarray(dimg_np)
     dimg.save(outputFilename)
 
 if __name__ == "__main__":

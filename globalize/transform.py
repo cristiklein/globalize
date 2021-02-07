@@ -48,6 +48,8 @@ def transform_roi_to_quad(simg, dimg, src, dst):
     mask = mask.all(axis=2)
     dimg[mask, :] = warped[mask, :]
 
+    return
+
     # Just for visualization
     import matplotlib.pyplot as plt
 
