@@ -6,7 +6,12 @@ from PIL import Image, ImageDraw
 
 from .transform import transform_roi_to_quad
 
-def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
+def globalize(
+        inputFilename,
+        outputFilename,
+        tropicsToEquatorRatio = 0.9,
+        polesToEquatorRatio = 0.6,
+    ):
     simg = Image.open(inputFilename)
     (w, h) = simg.size
 
@@ -15,7 +20,8 @@ def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
     dimg_np = np.full_like(simg_np, (255, 255, 255))
     dimg = Image.frombuffer('RGB', simg.size, dimg_np)
 
-    r = tropicsToEquatorRatio
+    rt = tropicsToEquatorRatio
+    rp = polesToEquatorRatio
 
     draw = ImageDraw.Draw(dimg)
     for xsection in range(8):
@@ -27,16 +33,16 @@ def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
 
             if ysection in [ 0, 3 ]:
                 # North/South Pole
-                xlt = (x0+x1)//2
-                xrt = (x0+x1)//2
+                xlt = int(x0*(rp) + x1*(1-rp))
+                xrt = int(x1*(rp) + x0*(1-rp))
 
-                xlb = int(x0*r+x1*(1-r))
-                xrb = int(x1*r+x0*(1-r))
+                xlb = int(x0*(rt) + x1*(1-rt))
+                xrb = int(x1*(rt) + x0*(1-rt))
 
             else:
                 # North/South of equator
-                xlt = int(x0*r + x1*(1-r))
-                xrt = int(x1*r + x0*(1-r))
+                xlt = int(x0*rt + x1*(1-rt))
+                xrt = int(x1*rt + x0*(1-rt))
 
                 xlb = x0
                 xrb = x1
