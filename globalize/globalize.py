@@ -1,19 +1,9 @@
-#!/usr/bin/env python3
-
 import os
 import sys
 
 from PIL import Image, ImageDraw
 
-# https://stackoverflow.com/a/37543316/1202136
-def reverse_quad_transform(simg, dimg, src, dst):
-  p = dimg.load()
-
-  w, h = dimg.size
-
-  for y in range(src[1], src[2]):
-    for x in range(src[0], src[3]):
-      p[x,y] = (0,0,255)
+from .transform import transform_roi_to_quad
 
 def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
     simg = Image.open(inputFilename)
@@ -59,7 +49,7 @@ def globalize(inputFilename, outputFilename, tropicsToEquatorRatio = 0.8):
             draw.line([p1, p2, p3, p4, p1], fill = 'black', width = 10)
 
             if xsection == 0 and ysection == 0:
-                reverse_quad_transform(simg, dimg,
+                transform_roi_to_quad(simg, dimg,
                     src = ((x0, y0), (x1, y1)),
                     dst = (p1, p2, p3, p4)
                 )
